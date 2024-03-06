@@ -16,12 +16,27 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberID;
+    private Long UID;
     @NotBlank
-    private String name;
+    private String name_last;
+    @NotBlank
+    private String name_first;
 
     @NotBlank
-    private String emailId;
+    private String email;
+
+    @NotBlank
+    private String phone;
+
+    @NotBlank
+    private String region;
+
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
+    @NotBlank
+    private String role; //! here change to enum or struct
 
     @JsonIgnore
     @Column(nullable = false, updatable = false)
@@ -41,28 +56,68 @@ public class User {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date updatedAt;
 
-    public Long getMemberID() {
-        return memberID;
+    public Long getUID() {
+        return UID;
     }
 
-    public void setMemberID(Long memberID) {
-        this.memberID = memberID;
+    public String getName_last() {
+        return name_last;
     }
 
-    public String getName() {
-        return name;
+    public void setName_last(String name_last) {
+        this.name_last = name_last;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPhone() {
+        return phone;
     }
 
-    public String getEmailId() {
-        return emailId;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getName_first() {
+        return name_first;
+    }
+
+    public void setName_first(String name_first) {
+        this.name_first = name_first;
+    }
+
+    public void setUID(Long userID) {
+        this.UID = userID;
+    }
+
+    public String getFirstName() {
+        return name_first;
+    }
+
+    public void setFirstName(String name) {
+        this.name_first = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String emailId) {
+        this.email = emailId;
     }
 
     public Date getCreatedAt() {

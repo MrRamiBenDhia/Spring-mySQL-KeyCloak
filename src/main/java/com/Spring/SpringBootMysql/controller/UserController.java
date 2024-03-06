@@ -33,6 +33,6 @@ public class UserController {
 
     @PostMapping("/addMember")
     public User addMember(@RequestBody User user) {
-        return userService.addMember(user);
+        return userService.addUser(user);
     }
 }

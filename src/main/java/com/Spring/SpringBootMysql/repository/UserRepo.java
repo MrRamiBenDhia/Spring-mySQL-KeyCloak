@@ -8,9 +8,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface UserRepo extends CrudRepository<User, Long> {
-    User findBymemberID(Long memberID);
+    User findByUID(Long UID);
 
-    User findByemailId(String emailId);
+    User findByemail(String email);
 
     List<User> findAll();
 }
