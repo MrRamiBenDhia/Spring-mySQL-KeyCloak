@@ -47,4 +47,11 @@ public class Client {
         this.description = description;
     }
 
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public void setRealm(Realm realm) {
+        this.realm = realm;
+    }
 }

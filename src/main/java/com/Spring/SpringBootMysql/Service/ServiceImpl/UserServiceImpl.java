@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        user.setUID(user.getUID());
+//        user.setUID(user.getUID());
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         return userRepo.save(user);

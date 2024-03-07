@@ -34,6 +34,21 @@ public class Realm {
     @JsonIgnore
     private Set< Client > clientSet;
 
+    public Set<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
+    }
+
+    public Set<Client> getClientSet() {
+        return clientSet;
+    }
+
+    public void setClientSet(Set<Client> clientSet) {
+        this.clientSet = clientSet;
+    }
 
     public Long getID() {
         return ID;

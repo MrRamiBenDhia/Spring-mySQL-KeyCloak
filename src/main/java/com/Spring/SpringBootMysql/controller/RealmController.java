@@ -22,6 +22,28 @@ public class RealmController {
     RealmService realmService;
 
 
+    @PutMapping("/{idRealm}/assignUser/{idUser}/")//? assign User to Realm
+    public void assignUser(@PathVariable Long idRealm, @PathVariable Long idUser){
+
+
+        System.out.println("~~~~~~~~~~~");
+        System.out.println(idRealm);
+        System.out.println("~~~~~~~~~~~");
+        realmService.addUser(idRealm,idUser);
+    }
+
+    @PutMapping("/{idRealm}/assignClient/{idClient}/")//? assign Client to Realm
+    public void assignClient(@PathVariable Long idRealm, @PathVariable Long idClient){
+
+
+        System.out.println("~~~~~~~~~~~");
+        System.out.println(idRealm);
+        System.out.println("~~~~~~~~~~~");
+        realmService.addClient(idRealm,idClient);
+    }
+
+
+
     @GetMapping("/")
     public List<Realm> getAllRealm() {
         return realmService.findAll();

@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RealmService {
-    Optional<Realm> findByID(Long ID);
+    void addUser(Long idRealm, Long idUser);
+    void addClient(Long idRealm, Long idClient);
+
+        Optional<Realm> findByID(Long ID);
     Realm addRealm(Realm realm);
     Realm updateRealm(Realm realm);
     void deleteRealm(Long idRealm);

@@ -19,6 +19,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long UID;
+
+
     @NotBlank
     private String name_last;
     @NotBlank
@@ -36,6 +38,22 @@ public class User {
     @ManyToOne
     @JsonIgnore
     public Realm realm;
+
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public void setRealm(Realm realm) {
+        this.realm = realm;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
