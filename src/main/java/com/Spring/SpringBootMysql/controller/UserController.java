@@ -11,7 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+//@Tag(name = "User Management ;-)")
+
+@RequestMapping("/user")
 @Controller
 public class UserController {
     @Autowired
@@ -19,20 +21,36 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/")
     public List<User> getAllUser() {
         return userRepo.findAll();
     }
 
-    @PostMapping("/create")
-    public User createMember(@RequestBody User user) {
+    @PostMapping("/")
+    public User createUser(@RequestBody User user) {
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
-        return userRepo.save(user);
+        return userService.addUser(user);
     }
 
-    @PostMapping("/addMember")
-    public User addMember(@RequestBody User user) {
-        return userService.addUser(user);
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable("id") Long id) {
+        return userService.findByUID(id).orElse(new User());
+    }
+
+    @PatchMapping("/{id}")
+
+    public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        if (user.getUID() == null) {
+            user.setUID(id);
+        }
+        user.setUpdatedAt(new Date());
+        return userService.updateUser(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+
     }
 }

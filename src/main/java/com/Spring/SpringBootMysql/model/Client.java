@@ -18,9 +18,6 @@ public class Client {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private boolean enabled;
-
     public Long getID() {
         return ID;
     }
@@ -45,11 +42,4 @@ public class Client {
         this.description = description;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 }

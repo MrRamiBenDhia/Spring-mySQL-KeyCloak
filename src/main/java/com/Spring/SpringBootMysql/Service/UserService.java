@@ -11,15 +11,10 @@ import java.util.Optional;
 public interface UserService {
 
     Optional<User> findByUID(Long UID);
-
     User findByemail(String email);
-
-
     User addUser(User user);
     User updateUser(User user);
-    void deleteUser(User user);
-
+    void deleteUser(Long userId);
     User save(User user);
     List<User> findAll();
-
 }

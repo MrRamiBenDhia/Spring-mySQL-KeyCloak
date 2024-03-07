@@ -2,9 +2,11 @@ package com.Spring.SpringBootMysql.repository;
 
 import com.Spring.SpringBootMysql.model.Realm;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RealmRepo extends CrudRepository<Realm,Long> {
     Realm findRealmsByID(Long ID);
 
