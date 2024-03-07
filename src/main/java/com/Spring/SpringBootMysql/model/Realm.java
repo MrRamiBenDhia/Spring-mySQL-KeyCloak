@@ -1,12 +1,14 @@
 package com.Spring.SpringBootMysql.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
+@Data
 public class Realm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +24,16 @@ public class Realm {
     private boolean verifyEmail;
 
     private boolean rememberMe;
+
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "realm")
+    @JsonIgnore
+    private Set< User > userSet;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "realm")
+    @JsonIgnore
+    private Set< Client > clientSet;
+
 
     public Long getID() {
         return ID;

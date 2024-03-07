@@ -3,6 +3,7 @@ package com.Spring.SpringBootMysql.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
+@Data
 //@Table(name = "user")
 public class User {
     @Id
@@ -31,6 +33,9 @@ public class User {
     @NotBlank
     private String region;
 
+    @ManyToOne
+    @JsonIgnore
+    public Realm realm;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;

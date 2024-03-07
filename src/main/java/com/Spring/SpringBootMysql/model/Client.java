@@ -1,12 +1,13 @@
 package com.Spring.SpringBootMysql.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
+@Data
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +18,10 @@ public class Client {
     private String name;
     @NotBlank
     private String description;
+
+    @ManyToOne
+    @JsonIgnore
+    public Realm realm;
 
     public Long getID() {
         return ID;
