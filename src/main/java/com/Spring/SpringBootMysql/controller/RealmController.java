@@ -44,7 +44,7 @@ public class RealmController {
 
 
 
-    @GetMapping("/")
+    @GetMapping
     public List<Realm> getAllRealm() {
         return realmService.findAll();
     }
@@ -57,7 +57,7 @@ public class RealmController {
         return realmService.findByID(id).orElse(new Realm());
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Realm createRealm(@RequestBody Realm realm) {
         return realmService.addRealm(realm);
     }

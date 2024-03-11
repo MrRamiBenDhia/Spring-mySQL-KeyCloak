@@ -21,7 +21,7 @@ public class ClientController {
     ClientService clientService;
 
 
-    @GetMapping("/")
+    @GetMapping
     public List<Client> getAllClient() {
         return clientService.findAll();
     }
@@ -30,7 +30,7 @@ public class ClientController {
         return clientService.findByID(id).orElse(new Client());
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Client createClient(@RequestBody Client client) {
         return clientService.addClient(client);
     }

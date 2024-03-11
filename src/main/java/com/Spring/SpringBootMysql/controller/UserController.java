@@ -23,12 +23,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/")
+    @GetMapping()
     public List<User> getAllUser() {
         return userRepo.findAll();
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public User createUser(@RequestBody User user) {
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
