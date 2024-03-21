@@ -8,10 +8,10 @@
         <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.Spring</groupId>
+    <groupId>com.minotore</groupId>
     <artifactId>springboot-mysql</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SpringBootMysql</name>
+    <name>SpringBootMySql</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -73,8 +73,27 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
-
         </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.12.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.9</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
