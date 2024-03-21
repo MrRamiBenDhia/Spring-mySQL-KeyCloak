@@ -1,4 +1,4 @@
-package com.minotore.Tools.jwt;
+package com.minotore.SpringBootMySql.Tools.jwt;
 
 
 import java.util.List;

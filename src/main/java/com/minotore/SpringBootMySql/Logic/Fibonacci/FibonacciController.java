@@ -1,4 +1,4 @@
-package com.minotore.Logic.Fibonacci;
+package com.minotore.SpringBootMySql.Logic.Fibonacci;
 
 
 import org.springframework.http.HttpStatus;
