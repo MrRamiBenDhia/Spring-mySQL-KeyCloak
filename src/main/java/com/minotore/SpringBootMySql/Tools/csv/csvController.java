@@ -14,6 +14,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +69,22 @@ public class csvController {
         long startTime = System.currentTimeMillis(); // Start measuring time
 
         List<User> users = readUsersFromCSV("Rust_User_3.csv");
+        if (users == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read CSV file");
+        }
+
+        addUserToDatabase(users);
+//        if (count == -1) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add users to database");
+//        }
+
+        long elapsedTime = System.currentTimeMillis() - startTime;
+        return ResponseEntity.ok("Users added successfully from CSV. Time taken: " + elapsedTime + " milliseconds" + "List size = " + users.size());
+    }    @PostMapping("/{filename}")
+    public ResponseEntity<?> createUsersFromCSVWithFileNameInParam(@PathVariable String filename) {
+        long startTime = System.currentTimeMillis(); // Start measuring time
+
+        List<User> users = readUsersFromCSV(filename+".csv");
         if (users == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read CSV file");
         }
