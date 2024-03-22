@@ -1,9 +1,8 @@
 package com.minotore.SpringBootMySql.Tools.csv;
 
 
-import com.minotore.SpringBootMySql.model.Realm;
 import com.minotore.SpringBootMySql.model.User;
-import com.minotore.SpringBootMySql.repository.RealmRepo;
+import com.minotore.SpringBootMySql.repository.UserRepo;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
@@ -13,32 +12,24 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.awt.print.Book;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/csv")
 public class csvController {
-    private final RealmRepo realmRepository;
-
     @Autowired
-    public csvController(RealmRepo realmRepository) throws IOException, CsvValidationException {
-        this.realmRepository = realmRepository;
-    }
+    UserRepo userRepo;
+
 
     void read_write() throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, CsvValidationException {
 
@@ -71,24 +62,6 @@ public class csvController {
 
     }
 
-    @GetMapping("/realmDetails")
-    public ResponseEntity<StreamingResponseBody> downloadCsv() {
-
-        StreamingResponseBody stream = outputStream -> {
-            List<Realm> realms = realmRepository.findAll();
-            try (Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
-//                try {
-//                    new StatefulBeanToCsvBuilder<Realm>(writer)
-//                            .build().write(realms);
-//                } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
-//                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-//                }
-            }
-        };
-
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("text/csv; charset=UTF-8")).header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", "realm_details.csv")).header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION).body(stream);
-    }
-
 
     @PostMapping
     public ResponseEntity<?> createUsersFromCSV() {
@@ -99,15 +72,16 @@ public class csvController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read CSV file");
         }
 
-//        int count = addUserToDatabase(users);
+        addUserToDatabase(users);
 //        if (count == -1) {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add users to database");
 //        }
 
         long elapsedTime = System.currentTimeMillis() - startTime;
-        return ResponseEntity.ok("Users added successfully from CSV. Time taken: " + elapsedTime + " milliseconds" + "List size = "+ users.size());
+        return ResponseEntity.ok("Users added successfully from CSV. Time taken: " + elapsedTime + " milliseconds" + "List size = " + users.size());
     }
 
+    // AI
     private List<User> readUsersFromCSV(String filename) {
         List<User> users = new ArrayList<>();
         try {
@@ -122,21 +96,23 @@ public class csvController {
                 }
                 String[] data = line.split(","); // Assuming CSV format: name,email,age,...
                 // Create a User object from data and add it to the list
-                users.add(new User(Long.parseLong(data[0]), data[1], data[2], data[3], data[4], data[5], data[6]));
-            }
-            br.close();
+
+                User x = new User(Long.parseLong(data[0]), data[1], data[2], data[3], data[4], data[5], data[6]);
+                x.setCreatedAt(new Date());
+                x.setUpdatedAt(new Date());
+
+                users.add(x);
+            } br.close();
         } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
             e.printStackTrace();
             return null; // Return null if any exception occurs
-        }
-        return users;
+        } return users;
     }
 
 
-    private int addUserToDatabase(List<User> users) {
-        // Logic to add users to the database
-        // You can use JDBC or any ORM framework like Hibernate to interact with the database
-        // Return the count of successfully added users, or -1 if there was an error
-        return 0; // Placeholder, implement your database logic here
+    private void addUserToDatabase(List<User> users) {
+
+        userRepo.saveAll(users);
+
     }
 }
