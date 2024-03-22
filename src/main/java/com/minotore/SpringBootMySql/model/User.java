@@ -3,6 +3,7 @@ package com.minotore.SpringBootMySql.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,30 +15,61 @@ import java.util.Date;
 
 @Entity
 @Data
+@AllArgsConstructor
 //@Table(name = "user")
 public class User {
+    @ManyToOne
+    @JsonIgnore
+    public Realm realm;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long UID;
-
-
     @NotBlank
     private String name_last;
     @NotBlank
     private String name_first;
-
     @NotBlank
     private String email;
-
     @NotBlank
     private String phone;
-
     @NotBlank
     private String region;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    @ManyToOne
     @JsonIgnore
-    public Realm realm;
+    @Column(nullable = false, updatable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    // Allows dd/MM/yyyy date to be passed into GET request in JSON
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
+
+
+    @JsonIgnore
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    // Allows dd/MM/yyyy date to be passed into GET request in JSON
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date updatedAt;
+
+    public User(){}
+
+    public User( Long UID, String name_first, String name_last, String phone, String email, String region,String realmID) {
+        this.UID = UID;
+        this.name_last = name_last;
+        this.name_first = name_first;
+        this.email = email;
+        this.phone = phone;
+        this.region = region;
+    }
+
+    //uid,user_role,name_first,name_last,email,phone,region,realm_id,created_at
+    //users.add(new User(Long.parseLong(data[0]), data[1], data[2], data[3], data[4], data[5], data[6]));
+
 
     public Realm getRealm() {
         return realm;
@@ -55,32 +87,12 @@ public class User {
         this.userRole = userRole;
     }
 
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole;
-
-    @NotBlank
-    private String role; //! here change to enum or struct
-
-    @JsonIgnore
-    @Column(nullable = false, updatable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    // Allows dd/MM/yyyy date to be passed into GET request in JSON
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt;
-
-    @JsonIgnore
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    // Allows dd/MM/yyyy date to be passed into GET request in JSON
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date updatedAt;
-
     public Long getUID() {
         return UID;
+    }
+
+    public void setUID(Long userID) {
+        this.UID = userID;
     }
 
     public String getName_last() {
@@ -107,24 +119,12 @@ public class User {
         this.region = region;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getName_first() {
         return name_first;
     }
 
     public void setName_first(String name_first) {
         this.name_first = name_first;
-    }
-
-    public void setUID(Long userID) {
-        this.UID = userID;
     }
 
     public String getFirstName() {

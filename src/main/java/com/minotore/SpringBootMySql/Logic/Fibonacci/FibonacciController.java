@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,16 +26,32 @@ public class FibonacciController {
         } else if (n < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot enter a negative number");
         } else {
-            int result = FibonacciSeq(n);
-            return ResponseEntity.ok(result);
+
+            // AI
+            // Start the stopwatch
+            long startTime = System.nanoTime();
+
+            Long FibonacciResult = FibonacciSeq(n);
+
+            // Stop the stopwatch
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1000000; // Convert nanoseconds to milliseconds
+
+            // Create response body
+            Map<String, Object> response = new HashMap<>();
+            response.put("FibonacciSeq Nth", FibonacciResult);
+            response.put("calculationTimeInMillis", duration);
+
+
+            return ResponseEntity.ok(response);
         }
     }
 
-    public int FibonacciSeq(int n) {
+    public Long FibonacciSeq(int n) {
         switch (n) {
             case 0:
             case 1:
-                return 1;
+                return 1L;
             default:
                 return FibonacciSeq(n - 2) + FibonacciSeq(n - 1);
         }

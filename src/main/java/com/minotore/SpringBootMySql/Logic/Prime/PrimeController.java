@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.sqrt;
 
@@ -23,7 +25,22 @@ public class PrimeController {
         } else if (n < 0) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot enter a negative number");
         } else {
-            return ResponseEntity.ok(listNthPrimeNumbers(n));
+            // AI
+            // Start the stopwatch
+            long startTime = System.nanoTime();
+
+            List<Long> primeNumbers = listNthPrimeNumbers(n);
+
+            // Stop the stopwatch
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1000000; // Convert nanoseconds to milliseconds
+
+            // Create response body
+            Map<String, Object> response = new HashMap<>();
+            response.put("primeNumbers", primeNumbers);
+            response.put("calculationTimeInMillis", duration);
+
+            return ResponseEntity.ok(response);
         }
     }
 
