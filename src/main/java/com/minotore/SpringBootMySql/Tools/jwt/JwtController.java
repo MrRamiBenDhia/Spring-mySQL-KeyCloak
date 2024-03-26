@@ -1,5 +1,7 @@
 package com.minotore.SpringBootMySql.Tools.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -7,10 +9,8 @@ import com.google.gson.JsonParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
@@ -26,8 +26,8 @@ public class JwtController {
 
     int numIters = 1000;
 
-    @PostMapping("/{n}")
-    public String benchmarkJwt(@PathVariable int n) throws IOException {
+    @GetMapping("/{n}")
+    public ResponseEntity<?> benchmarkJwt(@PathVariable int n) throws IOException {
         Gson gson = new Gson();
         String content = new String(Files.readAllBytes(Paths.get("./test-data/test-emails.json")));
         List<String> emails = new ArrayList<>();
@@ -46,6 +46,8 @@ public class JwtController {
 
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
+        String xToShow = "";
+
         for (int i = 0; i < n; i++) {
             String email = emails.get(i % emails.size());
             String jwt = Jwts.builder()
@@ -62,10 +64,24 @@ public class JwtController {
             if (!email.equals(claims.getSubject())) {
                 throw new IllegalStateException("JWT verification failed");
             }
+            if (i == 1) xToShow = jwt;
         }
 
         long endTS = System.currentTimeMillis();
         long diff = endTS - startTS;
-        return "{\"timeInMillis\": " + diff + "}";
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonResponse = mapper.createObjectNode();
+        jsonResponse.put("status", "success");
+        jsonResponse.put("count", n);
+        jsonResponse.put("result",xToShow);
+        jsonResponse.put("elapsed_time", String.format("%.3f seconds", diff / 1000.0));
+        jsonResponse.put("elapsed_millis", diff);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(jsonResponse);
+//        return "{\"timeInMillis\": " + diff + "}";
     }
 }

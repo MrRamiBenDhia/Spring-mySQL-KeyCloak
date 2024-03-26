@@ -35,7 +35,7 @@ public class User {
     @NotBlank
     private String region;
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private UserRole user_role;
 
     @JsonIgnore
     @Column(nullable = false, updatable = false)
@@ -80,11 +80,11 @@ public class User {
     }
 
     public UserRole getUserRole() {
-        return userRole;
+        return user_role;
     }
 
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
+    public void setUserRole(UserRole user_role) {
+        this.user_role = user_role;
     }
 
     public Long getUID() {

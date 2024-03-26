@@ -1,34 +1,66 @@
 package com.minotore.SpringBootMySql.Tools.Crypto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/crypto")
 public class CryptoController {
 
-    @GetMapping("/crypto/md5/{iterations}")
+    @GetMapping("/md5/{iterations}")
     @ResponseBody
-    public String hashMd5(@PathVariable int iterations) {
+    public ResponseEntity<?> hashMd5(@PathVariable int iterations) {
         long startTime = System.currentTimeMillis();
+
+        List<String> result = new ArrayList<>() ;
         for (int i = 0; i < iterations; i++) {
-            CryptoService.hashMd5(CryptoService.SAMPLE_TEXT);
+            result.add(CryptoService.hashMd5(CryptoService.SAMPLE_TEXT));
         }
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        return "MD5 hashing completed " + iterations + " times.\nTime taken (ms): " + duration;
+
+ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonResponse = mapper.createObjectNode();
+        jsonResponse.put("status", "success");
+        jsonResponse.put("count", iterations);
+        jsonResponse.put("result", result.get(0));
+        jsonResponse.put("elapsed_time", String.format("%.3f seconds", duration / 1000.0));
+        jsonResponse.put("elapsed_millis", duration);
+        
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(jsonResponse);
+//        return "MD5 hashing completed " + iterations + " times.\nTime taken (ms): " + duration;
     }
 
-    @GetMapping("/crypto/sha256/{iterations}")
+    @GetMapping("/sha256/{iterations}")
     @ResponseBody
-    public String hashSha256(@PathVariable int iterations) {
+    public ResponseEntity<?> hashSha256(@PathVariable int iterations) {
         long startTime = System.currentTimeMillis();
+        List<String> result = new ArrayList<>() ;
         for (int i = 0; i < iterations; i++) {
-            CryptoService.hashSha256(CryptoService.SAMPLE_TEXT);
+            result.add(CryptoService.hashSha256(CryptoService.SAMPLE_TEXT));
         }
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        return "SHA-256 hashing completed " + iterations + " times.\nTime taken (ms): " + duration;
+
+ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonResponse = mapper.createObjectNode();
+        jsonResponse.put("status", "success");
+        jsonResponse.put("count", iterations);
+        jsonResponse.put("result", result.get(0));
+        jsonResponse.put("elapsed_time", String.format("%.3f seconds", duration / 1000.0));
+        jsonResponse.put("elapsed_millis", duration);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(jsonResponse);
+//        return "SHA-256 hashing completed " + iterations + " times.\nTime taken (ms): " + duration;
     }
 }

@@ -1,5 +1,7 @@
 package com.minotore.SpringBootMySql.Logic.Prime;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,10 +39,23 @@ public class PrimeController {
 
             // Create response body
             Map<String, Object> response = new HashMap<>();
-            response.put("primeNumbers", primeNumbers);
-            response.put("calculationTimeInMillis", duration);
+//            response.put({"primeNumbers"= primeNumbers});
 
-            return ResponseEntity.ok(response);
+ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonResponse = mapper.createObjectNode();
+        jsonResponse.put("status", "success");
+        jsonResponse.put("count", n);
+        jsonResponse.put("result", primeNumbers.get(n-1));
+        jsonResponse.put("elapsed_time", String.format("%.3f seconds", duration / 1000.0));
+        jsonResponse.put("elapsed_millis", duration);
+        
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(jsonResponse);
+
+           
+//            response.put("calculationTimeInMillis", duration);
+//            return ResponseEntity.ok(response);
         }
     }
 

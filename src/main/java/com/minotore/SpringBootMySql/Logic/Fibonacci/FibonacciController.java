@@ -1,6 +1,8 @@
 package com.minotore.SpringBootMySql.Logic.Fibonacci;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,13 +39,18 @@ public class FibonacciController {
             long endTime = System.nanoTime();
             long duration = (endTime - startTime) / 1000000; // Convert nanoseconds to milliseconds
 
-            // Create response body
-            Map<String, Object> response = new HashMap<>();
-            response.put("FibonacciSeq Nth", FibonacciResult);
-            response.put("calculationTimeInMillis", duration);
 
-
-            return ResponseEntity.ok(response);
+ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonResponse = mapper.createObjectNode();
+        jsonResponse.put("status", "success");
+        jsonResponse.put("count", n);
+        jsonResponse.put("result", FibonacciResult);
+        jsonResponse.put("elapsed_time", String.format("%.3f seconds", duration / 1000.0));
+        jsonResponse.put("elapsed_millis", duration);
+        
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(jsonResponse);
         }
     }
 
