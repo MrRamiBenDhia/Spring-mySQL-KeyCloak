@@ -1,7 +1,6 @@
-FROM eclipse-temurin:17-jdk-alpine
-LABEL authors="rami.bendhia"
+FROM ubuntu:24.04
 
-#VOLUME /tmp
-COPY target/springboot-mysql-0.0.2-SNAPSHOT.jar app.jar
+# RUN apt-get -y update && apt-get -y upgrade
+COPY target/springboot-mysql /
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD ["/springboot-mysql"]

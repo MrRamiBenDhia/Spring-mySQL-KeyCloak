@@ -9,12 +9,12 @@
     </parent>
     <groupId>com.minotore</groupId>
     <artifactId>springboot-mysql</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>SpringBootMySql</name>
     <description>Spring Boot X Rust Project</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -97,17 +97,38 @@
     <build>
         <plugins>
             <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.9.23</version>
+                <extensions>true</extensions>
                 <configuration>
+                    <debug>true</debug>
+                    <verbose>true</verbose>
                     <archive>
                         <manifest>
                             <mainClass>com.minotore.SpringBootMySql.SpringBootMySqlApplication</mainClass>
                         </manifest>
                     </archive>
+                    <buildArgs>
+                        <arg>--initialize-at-run-time=com.minotore.translateapi.service.ReferentialAPIConnector</arg>
+                        <arg>--initialize-at-build-time=org.apache.commons.logging.LogFactory</arg>
+                        <arg>-J-Dfile.encoding=UTF-8</arg>
+                    </buildArgs>
+                    <resources>
+                        <resource>
+                            <patternSet>
+                                <includes>
+                                    <include>resource-config.json</include>
+                                    <include>reflect-config.json</include>
+                                    <include>native-image.properties</include>
+                                    <include>application.properties</include>
+                                </includes>
+                            </patternSet>
+                        </resource>
+                    </resources>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>
