@@ -102,6 +102,10 @@
                 <version>0.9.23</version>
                 <extensions>true</extensions>
                 <configuration>
+                
+                    <mainClass>com.minotore.SpringBootMySql.SpringBootMySqlApplication</mainClass>
+                    <imageName>${project.artifactId}</imageName>
+
                     <debug>true</debug>
                     <verbose>true</verbose>
                     <archive>
@@ -127,8 +131,40 @@
                         </resource>
                     </resources>
                 </configuration>
+                <executions>
+                <execution>
+                    <id>build-native</id>
+                    <goals>
+                        <goal>compile-no-fork</goal>
+                    </goals>
+                    <phase>package</phase>
+                </execution>
+    </executions>
             </plugin>
 
         </plugins>
     </build>
+      <repositories>
+    <repository>
+      <id>spring-releases</id>
+      <name>Spring Releases</name>
+      <url>https://repo.spring.io/release</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <url>https://repo.spring.io/milestone</url>
+    </repository>
+    <repository>
+      <id>netflix-candidates</id>
+      <name>Netflix Candidates</name>
+      <url>https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
 </project>
